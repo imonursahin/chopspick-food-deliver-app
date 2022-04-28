@@ -20,7 +20,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
           width: size.width,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xffd11771), Color(0xff7d59b5)],
+              colors: [Color(0xffd11771), Color(0xff7861be)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -53,14 +53,18 @@ class _GetStartedPageState extends State<GetStartedPage> {
                         text: 'Your everyday ', style: TextStyle(fontSize: 25)),
                     TextSpan(
                         text: 'meal \n',
-                        style:
-                            TextStyle(fontSize: 25, color: Color(0xff761616))),
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Color(0xff761616),
+                            fontWeight: FontWeight.bold)),
                     TextSpan(
                         text: 'delivered ', style: TextStyle(fontSize: 25)),
                     TextSpan(
                         text: 'to you',
-                        style:
-                            TextStyle(fontSize: 25, color: Color(0xff761616))),
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Color(0xff761616),
+                            fontWeight: FontWeight.bold)),
                   ])),
                 ),
 
@@ -79,12 +83,12 @@ class _GetStartedPageState extends State<GetStartedPage> {
                     },
                     child: const Text(
                       'Get Started',
-                      style: TextStyle(fontSize: 26, color: Color(0xff644AB5)),
+                      style: TextStyle(fontSize: 26, color: Color(0xff7861be)),
                     ),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.white,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                            borderRadius: BorderRadius.circular(24))),
                   ),
                 ),
               ],
