@@ -1,3 +1,4 @@
+import 'package:chopspick/views/Panel/home/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:quantity_input/quantity_input.dart';
 
@@ -127,7 +128,7 @@ class _AddPageState extends State<AddPage> {
                           onPressed: () {},
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
                 Padding(padding: EdgeInsets.only(top: 8)),
@@ -196,12 +197,12 @@ class _AddPageState extends State<AddPage> {
                   width: size.width * 0.8,
                   child: ElevatedButton(
                     onPressed: () {
-                      /* 
+                       
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => CartPage()),
                       );
-                     */
+                      
                     },
                     child: const Text(
                       'Add to Cart',
