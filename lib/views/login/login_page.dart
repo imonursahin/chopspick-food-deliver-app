@@ -1,7 +1,7 @@
-import 'package:chopspick/views/Panel/panel.dart';
-  import 'package:flutter/material.dart';
- 
- 
+import 'package:chopspick/views/register/register.dart';
+import 'package:flutter/material.dart';
+import '../Panel/panel.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -11,101 +11,86 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late Size size = MediaQuery.of(context).size;
+  int simpleIntInput = 1;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xfffe8686), Color(0xffe5e5e5)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 24,
-                   right: 24,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: size.height / 6),
-                    //text
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: buildTopText(),
-                    ),
-                    //email textfield
-                    buildMailTF(),
-                    SizedBox(height: 18),
-                    //pass textfield
-                    buildPassTF(),
-                  ],
-                ),
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(alignment: Alignment.bottomCenter, children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xfffe8686), Color(0xffe5e5e5)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter)),
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 24,
+                right: 24,
               ),
-              SizedBox(height: 10),
-              Stack(
+              child: Column(
                 children: [
-                  buildAboveLinear(),
-                  Column(
-                    children: [
-                      SizedBox(height: 10),
-
-                      // sign in button
-                      buildSigninBTTN(),
-                      SizedBox(height: 48),
-
-                      buildWithText(),
-                      SizedBox(height: 48),
-                      //social button
-                      buildSocialBTTN(),
-
-                      // sign up
-                      SizedBox(height: 48),
-                      buildBottomText(context),
-                    ],
+                  SizedBox(height: size.height / 5),
+                  //text
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Login to your Account",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
                   ),
+                  //email textfield
+                  buildMailTF(),
+                  SizedBox(height: 18),
+                  //pass textfield
+                  buildPassTF(),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      )),
+          Container(
+            height: 470,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24)),
+                gradient: LinearGradient(
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    Color(0xffa46ca3).withOpacity(0.8),
+                    Color(0xffbf99c9).withOpacity(0.2),
+                  ],
+                )),
+            child: Column(
+              children: [
+                SizedBox(height: 10),
+
+                // sign in button
+                buildLoginButton(context),
+                SizedBox(height: 48),
+
+                Text(
+                  "-Or Sign in with-",
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(height: 48),
+                //social button
+                BuildSocialBTTN(),
+
+                // sign up
+                SizedBox(height: 48),
+                buildRegisterTextBTTN(context),
+              ],
+            ),
+          ),
+        ]),
+      ),
     );
   }
 
-  Text buildWithText() {
-    return Text(
-      "-Or Sign in with-",
-      style: TextStyle(fontSize: 15),
-    );
-  }
-
-  Container buildAboveLinear() {
-    return Container(
-      height: size.height / 1.75,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24), topRight: Radius.circular(24)),
-          gradient: LinearGradient(
-            begin: FractionalOffset.topCenter,
-            end: FractionalOffset.bottomCenter,
-            colors: [
-              Color(0xffa46ca3).withOpacity(0.8),
-              Color(0xffbf99c9).withOpacity(0.2),
-            ],
-          )),
-    );
-  }
-
-  RichText buildBottomText(BuildContext context) {
+  RichText buildRegisterTextBTTN(BuildContext context) {
     return RichText(
       text: TextSpan(
           text: 'Don\'t have an account? ',
@@ -116,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Panel()),
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
                 );
               },
               child: Text('Sign up',
@@ -129,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Row buildSocialBTTN() {
+  Row BuildSocialBTTN() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -178,12 +163,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  SizedBox buildSigninBTTN() {
+  SizedBox buildLoginButton(BuildContext context) {
     return SizedBox(
       height: size.height * 0.06,
       width: size.width * 0.76,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Panel()),
+          );
+        },
         child: const Text(
           'Sign in',
           style: TextStyle(fontSize: 20, color: Colors.white),
@@ -193,13 +183,6 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12))),
       ),
-    );
-  }
-
-  Text buildTopText() {
-    return Text(
-      "Login to your Account",
-      style: TextStyle(fontSize: 20, color: Colors.black),
     );
   }
 

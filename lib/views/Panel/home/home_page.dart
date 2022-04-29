@@ -27,26 +27,20 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         //top text
                         buildTopText(),
-                        Padding(padding: EdgeInsets.only(top: 12)),
+                        SizedBox(height: 12),
                         //search input
-                        Center(
-                          child: buildSearchBar(),
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 24)),
-
+                        Center(child: buildSearchBar()),
+                        SizedBox(height: 18),
                         // category
                         buildCategoryList(),
-                        Padding(padding: EdgeInsets.only(top: 12)),
+                        SizedBox(height: 18),
+
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             //promotions
-                            SizedBox(
-                              height: 210,
-                              child: buildPromotions(),
-                            ),
-
-                            Padding(padding: EdgeInsets.only(top: 12)),
+                            buildPromotionsBanner(),
+                            SizedBox(height: 18),
                             buildPopular(),
                           ],
                         ),
@@ -55,6 +49,57 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  SizedBox buildPromotionsBanner() {
+    return SizedBox(
+      height: 210,
+      child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+        Container(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Promotions",
+            style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 12),
+          height: 175,
+          width: size.height,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              colors: [Color(0xffd83483), Color(0xff8660b7)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Today’s Offer",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 22,
+                        color: Colors.white)),
+                Text("Free Box of Fries",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color: Colors.white)),
+                Text("On all others above  200",
+                    style: TextStyle(fontSize: 22, color: Colors.white)),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+            right: 0, top: 0, child: Image.asset('assets/img/patato.png')),
+      ]),
     );
   }
 
@@ -133,11 +178,13 @@ class _HomePageState extends State<HomePage> {
                                 size: 30,
                               ),
                               color: Color(0xff0F8D04),
-                              onPressed: () { Navigator.push(
+                              onPressed: () {
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => AddPage()),
-                                );},
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -232,14 +279,14 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 22,
-                      color: Color(0xffD4D4D4))),
+                      color: Colors.white)),
               Text("Free Box of Fries",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 28,
-                      color: Color(0xffD4D4D4))),
+                      color: Colors.white)),
               Text("On all others above  200",
-                  style: TextStyle(fontSize: 22, color: Color(0xffD4D4D4))),
+                  style: TextStyle(fontSize: 22, color: Colors.white)),
             ],
           ),
         ),
