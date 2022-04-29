@@ -1,4 +1,4 @@
-import 'package:chopspick/views/Panel/home/panel.dart';
+import 'package:chopspick/views/Panel/panel.dart';
   import 'package:flutter/material.dart';
  
  

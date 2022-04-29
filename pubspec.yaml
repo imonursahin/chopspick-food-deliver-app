@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   widget_utils: ^0.2.8
   flutter_svg: ^1.0.3
+  quantity_input: ^1.0.2
 
 dev_dependencies:
   flutter_test:
