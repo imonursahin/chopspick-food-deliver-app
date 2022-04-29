@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "93893268662",
+    "project_id": "chopspick-5ae00",
+    "storage_bucket": "chopspick-5ae00.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93893268662:android:104e2ae1f602a6aee0c217",
+        "android_client_info": {
+          "package_name": "com.example.chopspick"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93893268662-rrg9j0h0q26dg54hdkp67q197lolonof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYpgi2RAU5E9O8oK9OLhNQQNqUMPX24yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93893268662-rrg9j0h0q26dg54hdkp67q197lolonof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
