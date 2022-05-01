@@ -1,4 +1,10 @@
+import 'package:chopspick/views/login/login_page.dart';
+import 'package:chopspick/views_model/register/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -10,6 +16,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   late Size size = MediaQuery.of(context).size;
   int simpleIntInput = 1;
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late String errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +51,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   //name textfield
-                  buildNameTF(),
-                  SizedBox(height: 1),
-                  //email textfield
-                  buildMailTF(),
-                  SizedBox(height: 1),
-                  //pass textfield
-                  buildPassTF(),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        buildNameTF(),
+                        SizedBox(height: 1),
+                        //email textfield
+                        buildMailTF(),
+                        SizedBox(height: 1),
+                        //pass textfield
+                        buildPassTF(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -102,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
               child: Text('Sign in',
@@ -169,7 +188,23 @@ class _RegisterPageState extends State<RegisterPage> {
       height: size.height * 0.06,
       width: size.width * 0.76,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          var provider = Provider.of<Auth>(context, listen: false);
+
+          if (_formKey.currentState!.validate()) {
+            try {
+              await provider.register(_nameController.text,
+                  _emailController.text, _passwordController.text);
+
+              Fluttertoast.showToast(
+                  msg:
+                      "Başarıyla kayıt oldunuz. Giriş yaparak hesabınıza ulaşabilirsiniz...");
+            } on FirebaseAuthException catch (error) {
+              errorMessage = error.message!;
+              Fluttertoast.showToast(msg: errorMessage);
+            }
+          }
+        },
         child: const Text(
           'Sign up',
           style: TextStyle(fontSize: 20, color: Colors.white),
@@ -184,6 +219,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildPassTF() {
     return TextFormField(
+      controller: _passwordController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -193,11 +229,24 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           labelText: 'Password',
           labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{6,}$');
+        if (value!.isEmpty) {
+          return ("Password is required for login");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid Password(Min. 6 Character)");
+        }
+      },
+      onSaved: (value) {
+        _passwordController.text = value!;
+      },
     );
   }
 
   TextFormField buildMailTF() {
     return TextFormField(
+      controller: _emailController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -207,11 +256,25 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           labelText: 'Email',
           labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please Enter Your Email");
+        }
+        // reg expression for email validation
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return ("Please Enter a valid email");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _emailController.text = value!;
+      },
     );
   }
 
   TextFormField buildNameTF() {
     return TextFormField(
+      controller: _nameController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -221,6 +284,19 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           labelText: 'Name',
           labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{3,}$');
+        if (value!.isEmpty) {
+          return ("First Name cannot be Empty");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid name(Min. 3 Character)");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _nameController.text = value!;
+      },
     );
   }
 }
