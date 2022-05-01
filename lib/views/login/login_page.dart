@@ -1,5 +1,9 @@
 import 'package:chopspick/views/register/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import '../../views_model/auth/auth.dart';
 import '../Panel/panel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +16,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late Size size = MediaQuery.of(context).size;
   int simpleIntInput = 1;
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late String errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +50,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   //email textfield
-                  buildMailTF(),
-                  SizedBox(height: 18),
-                  //pass textfield
-                  buildPassTF(),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        buildMailTF(),
+                        SizedBox(height: 18),
+                        //pass textfield
+                        buildPassTF(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -168,11 +184,25 @@ class _LoginPageState extends State<LoginPage> {
       height: size.height * 0.06,
       width: size.width * 0.76,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Panel()),
-          );
+        onPressed: () async {
+          var provider = Provider.of<AuthService>(context, listen: false);
+
+          if (_formKey.currentState!.validate()) {
+            try {
+              await provider
+                  .login(_emailController.text, _passwordController.text)
+                  .then((value) {
+                Fluttertoast.showToast(
+                    msg: "Bilgileriniz doğru, giriş yapılıyor...");
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Panel()),
+                    (Route<dynamic> route) => false);
+              });
+            } on FirebaseAuthException catch (error) {
+              errorMessage = error.message!;
+              Fluttertoast.showToast(msg: errorMessage);
+            }
+          }
         },
         child: const Text(
           'Sign in',
@@ -188,6 +218,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildPassTF() {
     return TextFormField(
+      controller: _passwordController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -197,11 +228,24 @@ class _LoginPageState extends State<LoginPage> {
           ),
           labelText: 'Password',
           labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{6,}$');
+        if (value!.isEmpty) {
+          return ("Password is required for login");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid Password(Min. 6 Character)");
+        }
+      },
+      onSaved: (value) {
+        _passwordController.text = value!;
+      },
     );
   }
 
   TextFormField buildMailTF() {
     return TextFormField(
+      controller: _emailController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -211,6 +255,19 @@ class _LoginPageState extends State<LoginPage> {
           ),
           labelText: 'Email',
           labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please Enter Your Email");
+        }
+        // reg expression for email validation
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return ("Please Enter a valid email");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _emailController.text = value!;
+      },
     );
   }
 }

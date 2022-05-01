@@ -1,15 +1,13 @@
 class UserData {
   String? name;
   String? email;
-  String? password;
 
-  UserData({this.name, this.email, this.password});
+  UserData({this.name, this.email});
 
   factory UserData.fromMap(map) {
     return UserData(
       name: map['name'],
       email: map['email'],
-      password: map['password'],
     );
   }
 
@@ -17,7 +15,6 @@ class UserData {
     return {
       'name': name,
       'email': email,
-      'password': password,
     };
   }
 }

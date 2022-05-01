@@ -1,10 +1,10 @@
 import 'package:chopspick/views/login/login_page.dart';
-import 'package:chopspick/views_model/register/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import '../../views_model/auth/auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -189,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
       width: size.width * 0.76,
       child: ElevatedButton(
         onPressed: () async {
-          var provider = Provider.of<Auth>(context, listen: false);
+          var provider = Provider.of<AuthService>(context, listen: false);
 
           if (_formKey.currentState!.validate()) {
             try {
