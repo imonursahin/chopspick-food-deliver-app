@@ -249,6 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildMailTF() {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       controller: _emailController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(

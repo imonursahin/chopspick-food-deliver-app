@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
-import '../login/LoginPage.dart';
+ import 'package:flutter/material.dart';
+ import '../login/LoginPage.dart';
 
 class GetStartedPage extends StatefulWidget {
   GetStartedPage({Key? key}) : super(key: key);

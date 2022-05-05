@@ -1,17 +1,24 @@
+import 'package:chopspick/model/ProductData.dart';
 import 'package:chopspick/views/Panel/home/CartPage.dart';
 import 'package:flutter/material.dart';
- 
-class AddPage extends StatefulWidget {
-  const AddPage({Key? key}) : super(key: key);
+
+class ProductDetailPage extends StatefulWidget {
+  final ProductData product;
+  const ProductDetailPage(this.product,{Key? key})
+      : super(key: key);
 
   @override
-  State<AddPage> createState() => _AddPageState();
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _ProductDetailPageState extends State<ProductDetailPage> {
   late Size size = MediaQuery.of(context).size;
-  int simpleIntInput = 1;
-
+   ProductData? _product;
+@override
+  void initState() {
+    _product = widget.product;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +89,7 @@ class _AddPageState extends State<AddPage> {
                 ],
               ),
             ),
-            Text("\$30",
+            Text("\$"+ "${_product!.price}",
                 style: TextStyle(
                     color: Color(0xffB4AC03),
                     fontWeight: FontWeight.bold,
@@ -93,7 +100,7 @@ class _AddPageState extends State<AddPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Bison Burgers",
+            Text(_product!.name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             Row(
               children: [
@@ -229,6 +236,6 @@ class _AddPageState extends State<AddPage> {
             ),
           ],
         ),
-        child: Image.asset("assets/img/biskon.png"));
+        child: Image.network("${_product!.url}"));
   }
 }

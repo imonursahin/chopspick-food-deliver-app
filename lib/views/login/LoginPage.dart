@@ -245,6 +245,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildMailTF() {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       controller: _emailController,
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(

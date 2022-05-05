@@ -22,7 +22,8 @@ class ProductService with ChangeNotifier {
         productList.add(ProductData(
             name: productData['name'],
             price: productData['price'],
-            url: productData['url']));
+            url: productData['url'],
+            quantity: productData['quantity']));
       }
     }
 

@@ -1,4 +1,4 @@
-import 'package:chopspick/views/Panel/home/AddPage.dart';
+import 'package:chopspick/views/Panel/home/ProductDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AddPage()),
+                                        builder: (context) => ProductDetailPage(
+                                            data.getProductList[index])),
                                   );
                                 },
                               ),
