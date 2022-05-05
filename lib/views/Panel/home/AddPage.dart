@@ -1,4 +1,4 @@
-import 'package:chopspick/views/Panel/home/cart_page.dart';
+import 'package:chopspick/views/Panel/home/CartPage.dart';
 import 'package:flutter/material.dart';
  
 class AddPage extends StatefulWidget {

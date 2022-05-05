@@ -1,5 +1,8 @@
-import 'package:chopspick/views/Panel/home/add_page.dart';
+import 'package:chopspick/views/Panel/home/AddPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../views_model/home/ProductService.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -10,6 +13,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Size size = MediaQuery.of(context).size;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductService>(context, listen: false).getProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +44,87 @@ class _HomePageState extends State<HomePage> {
                         buildCategoryList(),
                         SizedBox(height: 18),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //promotions
-                            buildPromotionsBanner(),
-                            SizedBox(height: 18),
-                            buildPopular(),
-                          ],
-                        ),
+                        buildPromotionsBanner(),
+                        SizedBox(height: 18),
+                        buildPopularProducts(),
                       ])),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Column buildPopularProducts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Most Popular",
+          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+        ),
+        Consumer<ProductService>(builder: (context, data, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(data.getProductList.length, (index) {
+              return Container(
+                margin: EdgeInsets.only(top: 12),
+                height: 190,
+                width: size.width / 2.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  gradient: LinearGradient(
+                    colors: [Color(0xffded0d0), Color(0xffedecec)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          child: Image.network(data.getProductList[index].url)),
+                      Text(data.getProductList[index].name,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18)),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("\$" + "${data.getProductList[index].price}",
+                                  style: TextStyle(
+                                      color: Color(0xffB4AC03),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18)),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.add_circle_sharp,
+                                  size: 30,
+                                ),
+                                color: Color(0xff0F8D04),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddPage()),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+              );
+            }),
+          );
+        }),
+      ],
     );
   }
 
@@ -126,126 +202,6 @@ class _HomePageState extends State<HomePage> {
   Text buildTopText() {
     return Text("What do you want to order today?",
         style: TextStyle(fontWeight: FontWeight.w300));
-  }
-
-  Column buildPopular() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Most Popular",
-          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 12),
-              height: 190,
-              width: size.width / 2.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  colors: [Color(0xffded0d0), Color(0xffedecec)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(child: Image.asset("assets/img/bison.png")),
-                    Text("Bison Burgers",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18)),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("\$30",
-                                style: TextStyle(
-                                    color: Color(0xffB4AC03),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18)),
-                            IconButton(
-                              icon: Icon(
-                                Icons.add_circle_sharp,
-                                size: 30,
-                              ),
-                              color: Color(0xff0F8D04),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddPage()),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 12),
-              height: 190,
-              width: size.width / 2.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  colors: [Color(0xffded0d0), Color(0xffedecec)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 24),
-                      child: Image.asset("assets/img/gelato.png"),
-                    ),
-                    Text("Gelato",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18)),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("\$30",
-                                style: TextStyle(
-                                    color: Color(0xffB4AC03),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18)),
-                            IconButton(
-                              icon: Icon(
-                                Icons.add_circle_sharp,
-                                size: 30,
-                              ),
-                              color: Color(0xff0F8D04),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ]),
-            ),
-          ],
-        ),
-      ],
-    );
   }
 
   Stack buildPromotions() {

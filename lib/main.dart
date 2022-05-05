@@ -1,14 +1,16 @@
-import 'package:chopspick/views/get_started/get_started_page.dart';
+import 'package:chopspick/views/get_started/GetStartedPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'views_model/auth/auth.dart';
+import 'views_model/auth/AuthService.dart';
+import 'views_model/home/ProductService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthService()),
+    ChangeNotifierProvider(create: (_) => ProductService()),
   ], child: const MyApp()));
 }
 

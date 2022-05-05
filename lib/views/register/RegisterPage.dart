@@ -1,22 +1,23 @@
-import 'package:chopspick/views/register/register.dart';
+import 'package:chopspick/views/login/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import '../../views_model/auth/auth.dart';
-import '../Panel/panel.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+import '../../views_model/auth/AuthService.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   late Size size = MediaQuery.of(context).size;
   int simpleIntInput = 1;
 
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -40,22 +41,25 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: size.height / 5),
+                  SizedBox(height: size.height / 6),
                   //text
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Login to your Account",
+                      "Create an Account",
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
-                  //email textfield
+                  //name textfield
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
+                        buildNameTF(),
+                        SizedBox(height: 1),
+                        //email textfield
                         buildMailTF(),
-                        SizedBox(height: 18),
+                        SizedBox(height: 1),
                         //pass textfield
                         buildPassTF(),
                       ],
@@ -66,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            height: 470,
+            height: 460,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(24),
@@ -83,21 +87,21 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 SizedBox(height: 10),
 
-                // sign in button
-                buildLoginButton(context),
+                // sign up button
+                buildRegisterBTTN(),
                 SizedBox(height: 48),
 
                 Text(
-                  "-Or Sign in with-",
+                  "-Or Sign up with-",
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 48),
                 //social button
-                BuildSocialBTTN(),
+                buildSocialButton(),
 
-                // sign up
+                // sign in
                 SizedBox(height: 48),
-                buildRegisterTextBTTN(context),
+                buildLoginTextBTTN(context),
               ],
             ),
           ),
@@ -106,10 +110,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  RichText buildRegisterTextBTTN(BuildContext context) {
+  RichText buildLoginTextBTTN(BuildContext context) {
     return RichText(
       text: TextSpan(
-          text: 'Don\'t have an account? ',
+          text: 'Already have an account? ',
           style: TextStyle(color: Colors.black, fontSize: 18),
           children: <WidgetSpan>[
             WidgetSpan(
@@ -117,10 +121,10 @@ class _LoginPageState extends State<LoginPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
-              child: Text('Sign up',
+              child: Text('Sign in',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -130,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Row BuildSocialBTTN() {
+  Row buildSocialButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -179,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  SizedBox buildLoginButton(BuildContext context) {
+  SizedBox buildRegisterBTTN() {
     return SizedBox(
       height: size.height * 0.06,
       width: size.width * 0.76,
@@ -189,23 +193,23 @@ class _LoginPageState extends State<LoginPage> {
 
           if (_formKey.currentState!.validate()) {
             try {
-              await provider
-                  .login(_emailController.text, _passwordController.text)
-                  .then((value) {
-                Fluttertoast.showToast(
-                    msg: "Bilgileriniz doğru, giriş yapılıyor...");
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => Panel()),
-                    (Route<dynamic> route) => false);
-              });
+              await provider.register(_nameController.text,
+                  _emailController.text, _passwordController.text);
+
+              Fluttertoast.showToast(
+                  msg:
+                      "Başarıyla kayıt oldunuz. Giriş yaparak hesabınıza ulaşabilirsiniz...");
             } on FirebaseAuthException catch (error) {
               errorMessage = error.message!;
               Fluttertoast.showToast(msg: errorMessage);
             }
           }
+          _emailController.clear();
+          _nameController.clear();
+          _passwordController.clear();
         },
         child: const Text(
-          'Sign in',
+          'Sign up',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
         style: ElevatedButton.styleFrom(
@@ -267,6 +271,34 @@ class _LoginPageState extends State<LoginPage> {
       },
       onSaved: (value) {
         _emailController.text = value!;
+      },
+    );
+  }
+
+  TextFormField buildNameTF() {
+    return TextFormField(
+      controller: _nameController,
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 2.0),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 2.0),
+          ),
+          labelText: 'Name',
+          labelStyle: TextStyle(color: Colors.white, fontSize: 20)),
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{3,}$');
+        if (value!.isEmpty) {
+          return ("First Name cannot be Empty");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Enter Valid name(Min. 3 Character)");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _nameController.text = value!;
       },
     );
   }

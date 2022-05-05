@@ -4,17 +4,15 @@ class UserData {
 
   UserData({this.name, this.email});
 
-  factory UserData.fromMap(map) {
-    return UserData(
-      name: map['name'],
-      email: map['email'],
-    );
+  UserData.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    email = json['email'];
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email': email,
-    };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = name;
+    data['email'] = email;
+    return data;
   }
 }

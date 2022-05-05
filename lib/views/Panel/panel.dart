@@ -1,6 +1,6 @@
-import 'package:chopspick/views/Panel/home/home_page.dart';
 import 'package:chopspick/views/Panel/home/none.dart';
 import 'package:flutter/material.dart';
+import 'home/HomePage.dart';
 
 class Panel extends StatefulWidget {
   const Panel({Key? key}) : super(key: key);
