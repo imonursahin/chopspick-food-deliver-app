@@ -1,4 +1,6 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+import '../../../model/ProductData.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -174,10 +176,10 @@ class _CartPageState extends State<CartPage> {
       width: size.width * 0.8,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(
+          /*  Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CartPage()),
-          );
+          ); */
         },
         child: const Text(
           'Checkout',

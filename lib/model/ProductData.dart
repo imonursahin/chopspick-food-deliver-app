@@ -2,19 +2,13 @@ class ProductData {
   late String name;
   late int price;
   late String url;
-  late String quantity;
 
-  ProductData(
-      {required this.name,
-      required this.price,
-      required this.url,
-      required this.quantity});
+  ProductData({required this.name, required this.price, required this.url});
 
   ProductData.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     price = json['price'];
     url = json['url'];
-    quantity = json['quantity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,7 +16,6 @@ class ProductData {
     data['name'] = name;
     data['price'] = price;
     data['url'] = url;
-    data['quantity'] = quantity;
 
     return data;
   }

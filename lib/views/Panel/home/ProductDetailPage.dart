@@ -1,11 +1,12 @@
 import 'package:chopspick/model/ProductData.dart';
 import 'package:chopspick/views/Panel/home/CartPage.dart';
+import 'package:chopspick/views_model/Home/ProductDetailService.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final ProductData product;
-  const ProductDetailPage(this.product,{Key? key})
-      : super(key: key);
+  const ProductDetailPage(this.product, {Key? key}) : super(key: key);
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -13,12 +14,13 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Size size = MediaQuery.of(context).size;
-   ProductData? _product;
-@override
+  ProductData? _product;
+  @override
   void initState() {
     _product = widget.product;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +91,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               ),
             ),
-            Text("\$"+ "${_product!.price}",
+            Text("\$" + "${_product!.price}",
                 style: TextStyle(
                     color: Color(0xffB4AC03),
                     fontWeight: FontWeight.bold,
@@ -102,30 +104,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             Text(_product!.name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_circle_down_rounded,
-                    size: 25,
-                  ),
-                  color: Color(0xffCC1A74),
-                  onPressed: () {},
-                ),
-                Text(
-                  "1",
-                  style: TextStyle(color: Colors.black),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_circle_up_rounded,
-                    size: 25,
-                  ),
-                  color: Color(0xffCC1A74),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+            Consumer<ProductDetailService>(builder: (context, data, child) {
+              return Row(
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.arrow_circle_down_rounded,
+            size: 25,
+          ),
+          color: Color(0xffCC1A74),
+          onPressed: () {data.downQuantity();},
+        ),
+        Text(
+          "${data.showQuantity()}",
+          style: TextStyle(color: Colors.black),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.arrow_circle_up_rounded,
+            size: 25,
+          ),
+          color: Color(0xffCC1A74),
+          onPressed: () {data.upQuantity();},
+        ),
+      ],
+    );
+            }),
           ],
         ),
         Padding(padding: EdgeInsets.only(top: 8)),
@@ -236,6 +240,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ],
         ),
-        child: Image.network("${_product!.url}"));
+        child: SizedBox(height: 300, child: Image.network("${_product!.url}")));
   }
 }
