@@ -25,6 +25,7 @@ class AuthService extends ChangeNotifier {
   // login
   Future<User?> login(String email, String password) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
+
     notifyListeners();
   }
 }

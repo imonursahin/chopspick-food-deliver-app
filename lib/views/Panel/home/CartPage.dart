@@ -1,9 +1,17 @@
+import 'package:chopspick/model/OrderData.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/ProductData.dart';
+import '../../../views_model/Home/ProductDetailService.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key? key}) : super(key: key);
+  final ProductData product;
+  final int quantity;
+  final OrderData orderData;
+
+  const CartPage(this.product, this.quantity, this.orderData, {Key? key})
+      : super(key: key);
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -23,7 +31,7 @@ class _CartPageState extends State<CartPage> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "1 items in Cart",
+                  "${widget.orderData.orderItem.length} " + "items in Cart",
                   style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -43,22 +51,25 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Row buildProductDetails() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        buildProductIMG(),
-        buildProductInfo(),
-        IconButton(
-          icon: Icon(
-            Icons.cancel_outlined,
-            size: 25,
+  Widget buildProductDetails() {
+    return Column(
+        children: List.generate(widget.orderData.orderItem.length, (index) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildProductIMG(),
+          buildProductInfo(),
+          IconButton(
+            icon: Icon(
+              Icons.cancel_outlined,
+              size: 25,
+            ),
+            color: Color(0xffEC0808),
+            onPressed: () {},
           ),
-          color: Color(0xffEC0808),
-          onPressed: () {},
-        ),
-      ],
-    );
+        ],
+      );
+    }));
   }
 
   Stack buildProductIMG() {
@@ -72,7 +83,7 @@ class _CartPageState extends State<CartPage> {
           borderRadius: BorderRadius.circular(25),
         ),
       ),
-      Image.asset("assets/img/gelato.png"),
+      Image.network(widget.product.url),
     ]);
   }
 
@@ -80,40 +91,46 @@ class _CartPageState extends State<CartPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Gelato",
+        Text(widget.product.name,
             style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w400,
                 fontSize: 23)),
-        Text("\$30",
+        Text("\$" + "${widget.product.price}",
             style: TextStyle(
                 color: Color(0xffB4AC03),
                 fontWeight: FontWeight.bold,
                 fontSize: 23)),
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.arrow_circle_down_rounded,
-                size: 25,
+        Consumer<ProductDetailService>(builder: (context, data, child) {
+          return Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_circle_down_rounded,
+                  size: 25,
+                ),
+                color: Color(0xffCC1A74),
+                onPressed: () {
+                  data.downQuantity();
+                },
               ),
-              color: Color(0xffCC1A74),
-              onPressed: () {},
-            ),
-            Text(
-              "1",
-              style: TextStyle(color: Colors.black),
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.arrow_circle_up_rounded,
-                size: 25,
+              Text(
+                data.quantity.toString(),
+                style: TextStyle(color: Colors.black),
               ),
-              color: Color(0xffCC1A74),
-              onPressed: () {},
-            ),
-          ],
-        ),
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_circle_up_rounded,
+                  size: 25,
+                ),
+                color: Color(0xffCC1A74),
+                onPressed: () {
+                  data.upQuantity();
+                },
+              ),
+            ],
+          );
+        })
       ],
     );
   }
@@ -149,24 +166,26 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Container buildTotalPrice() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text("Total:",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23)),
-          Text("\$30",
-              style: TextStyle(
-                  color: Color(0xffB4AC03),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23)),
-        ],
-      ),
-    );
+  Widget buildTotalPrice() {
+    return Consumer<ProductDetailService>(builder: (context, data, child) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Total:",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23)),
+            Text("\$" + "${data.showQuantity() * widget.product.price}",
+                style: TextStyle(
+                    color: Color(0xffB4AC03),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23)),
+          ],
+        ),
+      );
+    });
   }
 
   Container buildCheckoutBTTN(BuildContext context) {
