@@ -261,6 +261,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ],
         ),
-        child: SizedBox(height: 300, child: Image.network("${_product!.url}")));
+        child: SizedBox(height:250,child: Image.network("${_product!.url}")));
   }
 }

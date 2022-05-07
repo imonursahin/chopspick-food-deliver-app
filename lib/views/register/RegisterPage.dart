@@ -1,10 +1,10 @@
-import 'package:chopspick/views/login/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../views_model/auth/AuthService.dart';
+import '../login/LoginPage.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -15,7 +15,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late Size size = MediaQuery.of(context).size;
-  int simpleIntInput = 1;
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -27,85 +26,91 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(alignment: Alignment.bottomCenter, children: [
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Color(0xfffe8686), Color(0xffe5e5e5)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter)),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 24,
-                right: 24,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: size.height / 6),
-                  //text
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Create an Account",
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(children: [
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xfffe8686), Color(0xffb795a0)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter)),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 24,
+                      right: 24,
                     ),
-                  ),
-                  //name textfield
-                  Form(
-                    key: _formKey,
                     child: Column(
                       children: [
-                        buildNameTF(),
-                        SizedBox(height: 1),
-                        //email textfield
-                        buildMailTF(),
-                        SizedBox(height: 1),
-                        //pass textfield
-                        buildPassTF(),
+                        SizedBox(height: size.height / 6),
+                        //text
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Create an Account",
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
+                        ),
+                        //name textfield
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              buildNameTF(),
+                              SizedBox(height: 1),
+                              //email textfield
+                              buildMailTF(),
+                              SizedBox(height: 1),
+                              //pass textfield
+                              buildPassTF(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            height: 460,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24)),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: [
-                    Color(0xffa46ca3).withOpacity(0.8),
-                    Color(0xffbf99c9).withOpacity(0.2),
-                  ],
-                )),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-
-                // sign up button
-                buildRegisterBTTN(),
-                SizedBox(height: 48),
-
-                Text(
-                  "-Or Sign up with-",
-                  style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(height: 48),
-                //social button
-                buildSocialButton(),
+                Container(
+                  height: size.height,
+                  decoration: BoxDecoration(
+              /*         borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(18),
+                          topRight: Radius.circular(18)), */
+                      gradient: LinearGradient(
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                        colors: [
+                          Color(0xffa46ca3).withOpacity(0.8),
+                          Color(0xffbf99c9).withOpacity(0.2),
+                        ],
+                      )),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10),
 
-                // sign in
-                SizedBox(height: 48),
-                buildLoginTextBTTN(context),
-              ],
-            ),
+                      // sign up button
+                      buildRegisterBTTN(),
+                      SizedBox(height: 48),
+
+                      Text(
+                        "-Or Sign up with-",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(height: 48),
+                      //social button
+                      buildSocialButton(),
+
+                      // sign in
+                      SizedBox(height: 48),
+                      buildLoginTextBTTN(context),
+                    ],
+                  ),
+                ),
+              ]),
+            ],
           ),
-        ]),
+        ),
       ),
     );
   }
@@ -197,8 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   _emailController.text, _passwordController.text);
 
               Fluttertoast.showToast(
-                  msg:
-                      "Başarıyla kayıt oldunuz. Giriş yaparak hesabınıza ulaşabilirsiniz...");
+                  msg: "Başarıyla kayıt oldunuz. Giriş sayfasına gidiniz...");
             } on FirebaseAuthException catch (error) {
               errorMessage = error.message!;
               Fluttertoast.showToast(msg: errorMessage);

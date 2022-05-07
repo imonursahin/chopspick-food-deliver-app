@@ -67,7 +67,8 @@ class _HomePageState extends State<HomePage> {
         Consumer<ProductService>(builder: (context, data, child) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(data.getProductList.length, (index) {
+            children: List.generate(
+              data.getProductList.length, (index) {
               return Container(
                 margin: EdgeInsets.only(top: 12),
                 height: 190,

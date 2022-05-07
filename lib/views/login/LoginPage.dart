@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late Size size = MediaQuery.of(context).size;
-  int simpleIntInput = 1;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -26,82 +25,84 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(alignment: Alignment.bottomCenter, children: [
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Color(0xfffe8686), Color(0xffe5e5e5)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter)),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 24,
-                right: 24,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0xfffe8686), Color(0xffb795a0)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter)),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: size.height / 4),
+                    //text
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Login to your Account",
+                        style: TextStyle(fontSize: 20, color: Colors.black),
+                      ),
+                    ),
+                    //email textfield
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          buildMailTF(),
+                          SizedBox(height: 18),
+                          //pass textfield
+                          buildPassTF(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+            ),
+            Container(
+              height: size.height,
+              decoration: BoxDecoration(
+                  /*            borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24)), */
+                  gradient: LinearGradient(
+                begin: FractionalOffset.topCenter,
+                end: FractionalOffset.bottomCenter,
+                colors: [
+                  Color(0xffa46ca3).withOpacity(0.8),
+                  Color(0xffbf99c9).withOpacity(0.2),
+                ],
+              )),
               child: Column(
                 children: [
-                  SizedBox(height: size.height / 5),
-                  //text
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Login to your Account",
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
+                  SizedBox(height: 10),
+
+                  // sign in button
+                  buildLoginButton(context),
+                  SizedBox(height: 48),
+
+                  Text(
+                    "-Or Sign in with-",
+                    style: TextStyle(fontSize: 15),
                   ),
-                  //email textfield
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        buildMailTF(),
-                        SizedBox(height: 18),
-                        //pass textfield
-                        buildPassTF(),
-                      ],
-                    ),
-                  ),
+                  SizedBox(height: 48),
+                  //social button
+                  BuildSocialBTTN(),
+
+                  // sign up
+                  SizedBox(height: 48),
+                  buildRegisterTextBTTN(context),
                 ],
               ),
             ),
-          ),
-          Container(
-            height: 470,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24)),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: [
-                    Color(0xffa46ca3).withOpacity(0.8),
-                    Color(0xffbf99c9).withOpacity(0.2),
-                  ],
-                )),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-
-                // sign in button
-                buildLoginButton(context),
-                SizedBox(height: 48),
-
-                Text(
-                  "-Or Sign in with-",
-                  style: TextStyle(fontSize: 15),
-                ),
-                SizedBox(height: 48),
-                //social button
-                BuildSocialBTTN(),
-
-                // sign up
-                SizedBox(height: 48),
-                buildRegisterTextBTTN(context),
-              ],
-            ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

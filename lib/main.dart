@@ -1,4 +1,5 @@
 import 'package:chopspick/views/get_started/GetStartedPage.dart';
+import 'package:chopspick/views_model/Home/OrderService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => AuthService()),
     ChangeNotifierProvider(create: (_) => ProductService()),
     ChangeNotifierProvider(create: (_) => ProductDetailService()),
+    ChangeNotifierProvider(create: (_) => OrderService()),
   ], child: const MyApp()));
 }
 

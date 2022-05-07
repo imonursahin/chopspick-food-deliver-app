@@ -1,5 +1,7 @@
 import 'package:chopspick/model/OrderData.dart';
+import 'package:chopspick/views_model/Home/OrderService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../model/ProductData.dart';
@@ -19,6 +21,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late Size size = MediaQuery.of(context).size;
+  TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,9 @@ class _CartPageState extends State<CartPage> {
               size: 25,
             ),
             color: Color(0xffEC0808),
-            onPressed: () {},
+            onPressed: () {
+              removeItem(index);
+            },
           ),
         ],
       );
@@ -147,6 +152,7 @@ class _CartPageState extends State<CartPage> {
   TextFormField buildNoteTF() {
     return TextFormField(
       keyboardType: TextInputType.text,
+      controller: _controller,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
@@ -193,22 +199,35 @@ class _CartPageState extends State<CartPage> {
       margin: EdgeInsets.only(top: 24),
       height: 50,
       width: size.width * 0.8,
-      child: ElevatedButton(
-        onPressed: () {
-          /*  Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CartPage()),
-          ); */
-        },
-        child: const Text(
-          'Checkout',
-          style: TextStyle(fontSize: 22, color: Colors.white),
-        ),
-        style: ElevatedButton.styleFrom(
-            primary: Color(0xffCC1A74),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24))),
-      ),
+      child: Consumer<OrderService>(builder: (context, data, child) {
+        return ElevatedButton(
+          onPressed: () async {
+            try {
+              await data
+                ..addOrder(OrderData(
+                        orderItem: [
+                      /* OrderItem(quantity: widget.quantity, product:[""]) */
+                    ],
+                        description: _controller.text,
+                        totalPrice: widget.quantity * widget.product.price))
+                    .then((value) {
+                  Fluttertoast.showToast(msg: "Eklendi");
+                });
+            } catch (error) {
+              String msg = "Hata";
+              Fluttertoast.showToast(msg: msg);
+            }
+          },
+          child: const Text(
+            'Checkout',
+            style: TextStyle(fontSize: 22, color: Colors.white),
+          ),
+          style: ElevatedButton.styleFrom(
+              primary: Color(0xffCC1A74),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24))),
+        );
+      }),
     );
   }
 
@@ -223,5 +242,12 @@ class _CartPageState extends State<CartPage> {
           ),
           onPressed: () {}),
     );
+  }
+
+  void removeItem(int index) {
+    setState(() {
+      widget.orderData.orderItem = List.from(widget.orderData.orderItem)
+        ..removeAt(index);
+    });
   }
 }
